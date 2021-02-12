@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -18,7 +17,9 @@ import javax.validation.constraints.NotNull;
 public class InputSimulationData {
     @Id
     @GeneratedValue
-    private int id;
+    @NotNull
+    @Column(name="id",unique = true)
+    private Long id;
 
     @Column(name = "name")
     @NotNull
@@ -51,4 +52,12 @@ public class InputSimulationData {
     @Column(name = "sim_days")
     @NotNull
     private int daysToSimulate;
+
+    @OneToMany(
+            targetEntity = OutputSimulationData.class,
+            mappedBy = "inputSimulationData",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER
+    )
+    private List<OutputSimulationData> outputData = new ArrayList<>();
 }
