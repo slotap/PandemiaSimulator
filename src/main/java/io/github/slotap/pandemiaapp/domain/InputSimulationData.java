@@ -60,4 +60,19 @@ public class InputSimulationData {
             fetch = FetchType.EAGER
     )
     private List<OutputSimulationData> outputData = new ArrayList<>();
+
+    public InputSimulationData(@NotNull String title, @NotNull int population, @NotNull int infected, @NotNull Double rFactor, @NotNull Double mortalityIndex, @NotNull int daysToHeal, @NotNull int daysToDie, @NotNull int daysToSimulate) {
+        this.title = title;
+        this.population = population;
+        this.infected = infected;
+        this.rFactor = rFactor;
+        this.mortalityIndex = mortalityIndex;
+        this.daysToHeal = daysToHeal;
+        this.daysToDie = daysToDie;
+        this.daysToSimulate = daysToSimulate;
+    }
+
+    public void setOutputData(List<OutputSimulationData> outputData) {
+        this.outputData = outputData;
+    }
 }

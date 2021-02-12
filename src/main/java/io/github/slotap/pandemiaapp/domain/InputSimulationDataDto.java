@@ -18,4 +18,6 @@ public class InputSimulationDataDto {
     private int daysToDie;
     private int daysToSimulate;
     private List<OutputSimulationData> outputData;
+
+
 }

@@ -37,4 +37,15 @@ public class OutputSimulationData {
     @ManyToOne
     @JoinColumn(name = "input_data")
     private InputSimulationData inputSimulationData;
+
+    public OutputSimulationData(int infectedDaily,int diedDaily, int notInfectedDaily,int healedDaily){
+        this.infectedDaily=infectedDaily;
+        this.diedDaily=diedDaily;
+        this.notInfectedDaily=notInfectedDaily;
+        this.healedDaily=healedDaily;
+    }
+
+    public void setInputSimulationData(InputSimulationData inputSimulationData) {
+        this.inputSimulationData = inputSimulationData;
+    }
 }

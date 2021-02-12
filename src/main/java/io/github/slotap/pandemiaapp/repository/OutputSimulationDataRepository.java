@@ -1,11 +1,12 @@
 package io.github.slotap.pandemiaapp.repository;
 
 
+import io.github.slotap.pandemiaapp.domain.OutputSimulationData;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import javax.transaction.Transactional;
 
 @Transactional
 @Repository
-public interface OutputSimulationDataRepository extends CrudRepository<OutputSimulationDataRepository,Long > {
+public interface OutputSimulationDataRepository extends CrudRepository<OutputSimulationData,Long > {
 }
