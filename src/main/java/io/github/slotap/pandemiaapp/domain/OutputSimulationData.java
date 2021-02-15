@@ -75,4 +75,14 @@ public class OutputSimulationData {
     public void setOutputData(List<ProcessedSimulationData> outputData) {
         this.outputData = outputData;
     }
+
+    public void updateSimData(final InputSimulationData updatedData){
+        this.population = updatedData.getPopulation();
+        this.infected = updatedData.getInfected();
+        this.rFactor = updatedData.getRFactor();
+        this.mortalityIndex = updatedData.getMortalityIndex();
+        this.daysToHeal = updatedData.getDaysToHeal();
+        this.daysToDie = updatedData.getDaysToDie();
+        this.daysToSimulate = updatedData.getDaysToSimulate();
+    }
 }

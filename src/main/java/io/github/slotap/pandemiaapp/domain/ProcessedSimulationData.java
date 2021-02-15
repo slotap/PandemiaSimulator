@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "output_data")
+@Entity(name = "processed_data")
 public class ProcessedSimulationData {
     @Id
     @GeneratedValue

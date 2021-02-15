@@ -18,9 +18,9 @@ import java.util.List;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class SimulationController {
-    private DbService dbService;
-    private SimulationMapper simulationMapper;
-    private SimulationService simulationService;
+    private final DbService dbService;
+    private final SimulationMapper simulationMapper;
+    private final SimulationService simulationService;
 
     @GetMapping(value = "/simulations")
     public ResponseEntity<List<OutputSimulationDataDto>> getAllSimulations() {
@@ -29,8 +29,8 @@ public class SimulationController {
     }
 
     @GetMapping(value = "/simulations/{simId}")
-    public OutputSimulationDataDto getSimulation(@PathVariable Long simId) throws SimulationNotFoundException {
-        return simulationMapper.mapToOutputDto(dbService.findById(simId).orElseThrow(SimulationNotFoundException::new));
+    public ResponseEntity<OutputSimulationDataDto> getSimulation(@PathVariable Long simId) throws SimulationNotFoundException {
+        return ResponseEntity.ok(simulationMapper.mapToOutputDto(dbService.findById(simId).orElseThrow(SimulationNotFoundException::new)));
     }
 
     @DeleteMapping(value = "/simulations/{simId}")
@@ -45,13 +45,16 @@ public class SimulationController {
         return ResponseEntity.ok(simulationMapper.mapToOutputDto(processedSimulation));
     }
 
-/*    @PutMapping(value = "/simulations/{simIs}",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public InputSimulationDataDto updateSimulation(@RequestBody InputSimulationDataDto inputDto,@PathVariable Long simId ) {
-        InputSimulationData processedSimulation = simulationService.processSimulation(simulationMapper.mapToInput(inputDto));
-        dbService.updateSimulationData(simId, processedSimulation);
-        return simulationMapper.mapToInputDto(processedSimulation);
+/*    @PutMapping(value = "/simulations/{simId}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<OutputSimulationDataDto> updateSimulation(@PathVariable Long id, @RequestBody InputSimulationData inputData) {
+        if(!dbService.existById(id)){
+            return ResponseEntity.notFound().build();
+        }
+        dbService.findById(id)
+                .map(OutputSimulationData :: updateSimData(inputData))
+                .
+        OutputSimulationData processedSimulation = simulationService.processSimulation(inputData);
+        dbService.saveSimulationData(processedSimulation);
+        return ResponseEntity.ok(simulationMapper.mapToOutputDto(processedSimulation));
     }*/
-
-
-
 }

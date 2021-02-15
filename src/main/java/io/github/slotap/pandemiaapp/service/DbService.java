@@ -30,7 +30,7 @@ public class DbService {
         outputSimulationRepository.deleteById(id);
     }
 
-/*    public InputSimulationData updateSimulationData(Long simId, InputSimulationData processedSimulation) {
-        return inputRepository.save
-    }*/
+    public boolean existById(long id) {
+        return outputSimulationRepository.existsById(id);
+    }
 }

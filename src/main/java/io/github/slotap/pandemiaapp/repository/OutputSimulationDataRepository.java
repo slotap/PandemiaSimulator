@@ -13,4 +13,5 @@ public interface OutputSimulationDataRepository extends CrudRepository<OutputSim
     List<OutputSimulationData> findAll();
     Optional<OutputSimulationData> findById(Long id);
     void deleteById(Long id);
+    boolean existsById(Long id);
 }
