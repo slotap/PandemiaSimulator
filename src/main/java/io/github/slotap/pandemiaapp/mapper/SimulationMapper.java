@@ -1,7 +1,8 @@
 package io.github.slotap.pandemiaapp.mapper;
 
 import io.github.slotap.pandemiaapp.domain.InputSimulationData;
-import io.github.slotap.pandemiaapp.domain.InputSimulationDataDto;
+import io.github.slotap.pandemiaapp.domain.OutputSimulationData;
+import io.github.slotap.pandemiaapp.domain.OutputSimulationDataDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,38 +11,38 @@ import java.util.stream.Collectors;
 @Service
 public class SimulationMapper {
 
-    public InputSimulationDataDto mapToInputDto (InputSimulationData inputData){
-        return new InputSimulationDataDto(
-                inputData.getId(),
-                inputData.getTitle(),
-                inputData.getPopulation(),
-                inputData.getInfected(),
-                inputData.getRFactor(),
-                inputData.getMortalityIndex(),
-                inputData.getDaysToHeal(),
-                inputData.getDaysToDie(),
-                inputData.getDaysToSimulate(),
-                inputData.getOutputData()
+    public OutputSimulationDataDto mapToOutputDto (OutputSimulationData outputData){
+        return new OutputSimulationDataDto(
+                outputData.getId(),
+                outputData.getTitle(),
+                outputData.getPopulation(),
+                outputData.getInfected(),
+                outputData.getRFactor(),
+                outputData.getMortalityIndex(),
+                outputData.getDaysToHeal(),
+                outputData.getDaysToDie(),
+                outputData.getDaysToSimulate(),
+                outputData.getOutputData()
         );
     }
-    public InputSimulationData mapToInput (InputSimulationDataDto inputData){
-        return new InputSimulationData(
-                inputData.getId(),
-                inputData.getTitle(),
-                inputData.getPopulation(),
-                inputData.getInfected(),
-                inputData.getRFactor(),
-                inputData.getMortalityIndex(),
-                inputData.getDaysToHeal(),
-                inputData.getDaysToDie(),
-                inputData.getDaysToSimulate(),
-                inputData.getOutputData()
+    public OutputSimulationData mapToOutput (OutputSimulationDataDto outputSimulationDataDto){
+        return new OutputSimulationData(
+                outputSimulationDataDto.getId(),
+                outputSimulationDataDto.getTitle(),
+                outputSimulationDataDto.getPopulation(),
+                outputSimulationDataDto.getInfected(),
+                outputSimulationDataDto.getRFactor(),
+                outputSimulationDataDto.getMortalityIndex(),
+                outputSimulationDataDto.getDaysToHeal(),
+                outputSimulationDataDto.getDaysToDie(),
+                outputSimulationDataDto.getDaysToSimulate(),
+                outputSimulationDataDto.getOutputData()
         );
     }
 
-    public List<InputSimulationDataDto> mapToSimulationList(List<InputSimulationData> simData) {
+    public List<OutputSimulationDataDto> mapToSimulationList(List<OutputSimulationData> simData) {
         return simData.stream()
-                .map(this::mapToInputDto)
+                .map(this::mapToOutputDto)
                 .collect(Collectors.toList());
     }
 }

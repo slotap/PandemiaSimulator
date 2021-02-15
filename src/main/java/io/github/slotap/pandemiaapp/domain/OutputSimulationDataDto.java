@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class InputSimulationDataDto {
+public class OutputSimulationDataDto {
     private Long id;
     private String title;
     private int population;
@@ -17,7 +17,5 @@ public class InputSimulationDataDto {
     private int daysToHeal;
     private int daysToDie;
     private int daysToSimulate;
-    private List<OutputSimulationData> outputData;
-
-
+    private List<ProcessedSimulationData> outputData;
 }

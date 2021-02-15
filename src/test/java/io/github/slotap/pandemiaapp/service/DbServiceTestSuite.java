@@ -2,7 +2,8 @@ package io.github.slotap.pandemiaapp.service;
 
 import io.github.slotap.pandemiaapp.domain.InputSimulationData;
 import io.github.slotap.pandemiaapp.domain.OutputSimulationData;
-import io.github.slotap.pandemiaapp.repository.InputSimulationRepository;
+import io.github.slotap.pandemiaapp.domain.ProcessedSimulationData;
+import io.github.slotap.pandemiaapp.repository.OutputSimulationDataRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,27 +18,27 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class DbServiceTestSuite {
 
     @Autowired
-    private InputSimulationRepository inputSimulationRepository;
+    private OutputSimulationDataRepository outputSimulationDataRepository;
 
     @Test
     void testInputDataSaveWithOutputData(){
         //Given
-        OutputSimulationData firstDayOfSimulation = new OutputSimulationData(300,30,70,200);
-        OutputSimulationData secondDayOfSimulation = new OutputSimulationData(300,30,70,200);
-        InputSimulationData testSimulation = new InputSimulationData("testSim",300,1,2.0,1.2,12,5,180);
+        ProcessedSimulationData firstDayOfSimulation = new ProcessedSimulationData(300,30,70,200);
+        ProcessedSimulationData secondDayOfSimulation = new ProcessedSimulationData(300,30,70,200);
+        OutputSimulationData testSimulation = new OutputSimulationData("testSim",300,1,2.0,1.2,12,5,180);
         testSimulation.getOutputData().add(firstDayOfSimulation);
         testSimulation.getOutputData().add(secondDayOfSimulation);
-        firstDayOfSimulation.setInputSimulationData(testSimulation);
-        secondDayOfSimulation.setInputSimulationData(testSimulation);
+        firstDayOfSimulation.setOutputSimulationData(testSimulation);
+        secondDayOfSimulation.setOutputSimulationData(testSimulation);
 
         //When
-        inputSimulationRepository.save(testSimulation);
+        outputSimulationDataRepository.save(testSimulation);
         Long id = testSimulation.getId();
 
         //Then
         assertNotEquals(0 ,id);
 
         //CleanUp
-        inputSimulationRepository.deleteById(id);
+        outputSimulationDataRepository.deleteById(id);
     }
 }
