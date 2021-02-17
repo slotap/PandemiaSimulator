@@ -77,6 +77,7 @@ public class OutputSimulationData {
     }
 
     public void updateSimData(final InputSimulationData updatedData){
+        this.title = updatedData.getTitle();
         this.population = updatedData.getPopulation();
         this.infected = updatedData.getInfected();
         this.rFactor = updatedData.getRFactor();

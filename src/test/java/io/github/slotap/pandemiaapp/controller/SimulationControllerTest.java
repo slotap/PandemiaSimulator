@@ -55,7 +55,7 @@ class SimulationControllerTest {
                             .andExpect(MockMvcResultMatchers.jsonPath("$[0].title", Matchers.is("testSim")))
                             .andExpect(MockMvcResultMatchers.jsonPath("$[0].population", Matchers.is(100)))
                             .andExpect(MockMvcResultMatchers.jsonPath("$[0].infected", Matchers.is(20)))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].rFactor", Matchers.is(1.5)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].rfactor", Matchers.is(1.5)))
                             .andExpect(MockMvcResultMatchers.jsonPath("$[0].mortalityIndex", Matchers.is(1.5)))
                             .andExpect(MockMvcResultMatchers.jsonPath("$[0].daysToHeal", Matchers.is(12)))
                             .andExpect(MockMvcResultMatchers.jsonPath("$[0].daysToDie", Matchers.is(5)))
