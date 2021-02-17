@@ -5,6 +5,7 @@ import io.github.slotap.pandemiaapp.domain.OutputSimulationData;
 import io.github.slotap.pandemiaapp.domain.OutputSimulationDataDto;
 import io.github.slotap.pandemiaapp.mapper.SimulationMapper;
 import io.github.slotap.pandemiaapp.service.DbService;
+import io.github.slotap.pandemiaapp.service.SimulationProcessorService;
 import io.github.slotap.pandemiaapp.service.SimulationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -20,7 +21,7 @@ import java.util.List;
 public class SimulationController {
     private final DbService dbService;
     private final SimulationMapper simulationMapper;
-    private final SimulationService simulationService;
+    private final SimulationProcessorService simulationProcessor;
 
     @GetMapping(value = "/simulations")
     public ResponseEntity<List<OutputSimulationDataDto>> getAllSimulations() {
@@ -40,21 +41,20 @@ public class SimulationController {
 
     @PostMapping(value = "/simulations",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OutputSimulationDataDto> createSimulation(@RequestBody InputSimulationData inputData) {
-        OutputSimulationData processedSimulation = simulationService.processSimulation(inputData);
+        OutputSimulationData processedSimulation = simulationProcessor.createOutputData(inputData);
         dbService.saveSimulationData(processedSimulation);
         return ResponseEntity.ok(simulationMapper.mapToOutputDto(processedSimulation));
     }
 
-/*    @PutMapping(value = "/simulations/{simId}",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OutputSimulationDataDto> updateSimulation(@PathVariable Long id, @RequestBody InputSimulationData inputData) {
-        if(!dbService.existById(id)){
-            return ResponseEntity.notFound().build();
-        }
-        dbService.findById(id)
-                .map(OutputSimulationData :: updateSimData(inputData))
-                .
-        OutputSimulationData processedSimulation = simulationService.processSimulation(inputData);
-        dbService.saveSimulationData(processedSimulation);
+    @PutMapping(value = "/simulations/{simId}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<OutputSimulationDataDto> updateSimulation(@PathVariable Long simId, @RequestBody InputSimulationData inputData) {
+            OutputSimulationData processedSimulation = null;
+            try {
+                 processedSimulation = simulationProcessor.updateOutputData(simId,inputData);
+            } catch (SimulationNotFoundException e) {
+                return ResponseEntity.notFound().build();
+            }
+            dbService.saveSimulationData(processedSimulation);
         return ResponseEntity.ok(simulationMapper.mapToOutputDto(processedSimulation));
-    }*/
+    }
 }

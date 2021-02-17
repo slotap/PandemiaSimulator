@@ -1,6 +1,5 @@
 package io.github.slotap.pandemiaapp.mapper;
 
-import io.github.slotap.pandemiaapp.domain.InputSimulationData;
 import io.github.slotap.pandemiaapp.domain.OutputSimulationData;
 import io.github.slotap.pandemiaapp.domain.OutputSimulationDataDto;
 import org.springframework.stereotype.Service;

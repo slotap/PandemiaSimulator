@@ -5,7 +5,7 @@ import io.github.slotap.pandemiaapp.domain.OutputSimulationDataDto;
 import io.github.slotap.pandemiaapp.domain.ProcessedSimulationData;
 import io.github.slotap.pandemiaapp.mapper.SimulationMapper;
 import io.github.slotap.pandemiaapp.service.DbService;
-import io.github.slotap.pandemiaapp.service.SimulationService;
+import io.github.slotap.pandemiaapp.service.SimulationProcessorService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ class SimulationControllerTest {
     private SimulationMapper simulationMapper;
 
     @MockBean
-    private SimulationService simulationService;
+    private SimulationProcessorService simulationService;
 
     @Test
     void shouldFetchAllSimulations() throws Exception{
