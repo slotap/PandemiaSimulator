@@ -1,5 +1,7 @@
 package io.github.slotap.pandemiaapp.controller;
 
+import com.google.gson.Gson;
+import io.github.slotap.pandemiaapp.domain.InputSimulationData;
 import io.github.slotap.pandemiaapp.domain.OutputSimulationData;
 import io.github.slotap.pandemiaapp.domain.OutputSimulationDataDto;
 import io.github.slotap.pandemiaapp.domain.ProcessedSimulationData;
@@ -18,7 +20,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringJUnitWebConfig
@@ -68,18 +72,100 @@ class SimulationControllerTest {
     }
 
     @Test
-    void shouldFetchOneSimulation() {
+    void shouldFetchOneSimulation() throws Exception {
+        //Given
+        List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50,20,20,10));
+        Optional<OutputSimulationData> outputSimulationData = Optional.of(new OutputSimulationData(1L, "testSim", 100, 20, 1.5, 1.5, 12, 5, 100, processedData));
+        OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
+
+        when(dbService.findById(1L)).thenReturn(outputSimulationData);
+        when(simulationMapper.mapToOutputDto(outputSimulationData.get())).thenReturn(outputSimulationDataDto);
+
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/simulations/1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title", Matchers.is("testSim")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.population", Matchers.is(100)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.infected", Matchers.is(20)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.rfactor", Matchers.is(1.5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mortalityIndex", Matchers.is(1.5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.daysToHeal", Matchers.is(12)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.daysToDie", Matchers.is(5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.daysToSimulate", Matchers.is(100)))
+                //Processed Data List
+                .andExpect(MockMvcResultMatchers.jsonPath("$.outputData[0].infectedDaily", Matchers.is(50)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.outputData[0].diedDaily", Matchers.is(20)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.outputData[0].notInfectedDaily", Matchers.is(20)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.outputData[0].healedDaily", Matchers.is(10)));
     }
 
     @Test
-    void shouldDeleteSimulation() {
+    void shouldCreateSimulation() throws Exception {
+        //Given
+        List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50,20,20,10));
+        OutputSimulationData outputSimulationData = new OutputSimulationData(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
+        OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
+        OutputSimulationDataDto outputSimulationDataDtoJson = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
+
+        when(simulationService.createOutputData(any(InputSimulationData.class))).thenReturn(outputSimulationData);
+        when(dbService.saveSimulationData(outputSimulationData)).thenReturn(outputSimulationData);
+        when(simulationMapper.mapToOutputDto(outputSimulationData)).thenReturn(outputSimulationDataDto);
+
+        Gson gson = new Gson();
+        String jsonContent = gson.toJson(outputSimulationDataDtoJson);
+
+        //When & Then
+        mockMvc
+                .perform(MockMvcRequestBuilders
+                        .post("/api/simulations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(jsonContent))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title", Matchers.is("testSim")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.population", Matchers.is(100)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.infected", Matchers.is(20)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.rfactor", Matchers.is(1.5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mortalityIndex", Matchers.is(1.5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.daysToHeal", Matchers.is(12)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.daysToDie", Matchers.is(5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.daysToSimulate", Matchers.is(100)));
+
     }
 
     @Test
-    void createSimulation() {
-    }
+    void shouldUpdateSimulation() throws Exception {
+        //Given
+        List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50,20,20,10));
+        OutputSimulationData outputSimulationData = new OutputSimulationData(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
+        OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
+        OutputSimulationDataDto outputSimulationDataDtoJson = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
 
-    @Test
-    void updateSimulation() {
+        when(simulationService.updateOutputData(any(Long.class),any(InputSimulationData.class))).thenReturn(outputSimulationData);
+        when(dbService.saveSimulationData(outputSimulationData)).thenReturn(outputSimulationData);
+        when(simulationMapper.mapToOutputDto(outputSimulationData)).thenReturn(outputSimulationDataDto);
+
+        Gson gson = new Gson();
+        String jsonContent = gson.toJson(outputSimulationDataDtoJson);
+
+        //When & Then
+        mockMvc
+                .perform(MockMvcRequestBuilders
+                        .put("/api/simulations/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(jsonContent))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title", Matchers.is("testSim")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.population", Matchers.is(100)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.infected", Matchers.is(20)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.rfactor", Matchers.is(1.5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mortalityIndex", Matchers.is(1.5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.daysToHeal", Matchers.is(12)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.daysToDie", Matchers.is(5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.daysToSimulate", Matchers.is(100)));
+
     }
 }

@@ -42,7 +42,7 @@ public class SimulationController {
     @PostMapping(value = "/simulations",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OutputSimulationDataDto> createSimulation(@RequestBody InputSimulationData inputData) {
         OutputSimulationData processedSimulation = simulationProcessor.createOutputData(inputData);
-        dbService.saveSimulationData(processedSimulation);
+        processedSimulation = dbService.saveSimulationData(processedSimulation);
         return ResponseEntity.ok(simulationMapper.mapToOutputDto(processedSimulation));
     }
 
