@@ -31,7 +31,7 @@ public class SimulationController {
 
     @GetMapping(value = "/simulations/{simId}")
     public ResponseEntity<OutputSimulationDataDto> getSimulation(@PathVariable Long simId) throws SimulationNotFoundException {
-        return ResponseEntity.ok(simulationMapper.mapToOutputDto(dbService.findById(simId).orElseThrow(SimulationNotFoundException::new)));
+        return ResponseEntity.ok(simulationMapper.mapToOutputDto(dbService.findById(simId).orElseThrow(() -> new SimulationNotFoundException("Simulation Not Found"))));
     }
 
     @DeleteMapping(value = "/simulations/{simId}")

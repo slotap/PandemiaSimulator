@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @AllArgsConstructor
@@ -85,5 +86,18 @@ public class OutputSimulationData {
         this.daysToHeal = updatedData.getDaysToHeal();
         this.daysToDie = updatedData.getDaysToDie();
         this.daysToSimulate = updatedData.getDaysToSimulate();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OutputSimulationData that = (OutputSimulationData) o;
+        return population == that.population && infected == that.infected && daysToHeal == that.daysToHeal && daysToDie == that.daysToDie && daysToSimulate == that.daysToSimulate && id.equals(that.id) && title.equals(that.title) && rFactor.equals(that.rFactor) && mortalityIndex.equals(that.mortalityIndex);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, population, infected, rFactor, mortalityIndex, daysToHeal, daysToDie, daysToSimulate);
     }
 }
