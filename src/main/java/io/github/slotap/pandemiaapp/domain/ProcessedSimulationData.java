@@ -18,6 +18,10 @@ public class ProcessedSimulationData {
     @Column(name="id",unique = true)
     private Long id;
 
+    @Column(name = "infected_total")
+    @NotNull
+    private int infectedTotal;
+
     @Column(name = "infected_daily")
     @NotNull
     private int infectedDaily;
@@ -38,11 +42,19 @@ public class ProcessedSimulationData {
     @JoinColumn(name = "output_data")
     private OutputSimulationData outputSimulationData;
 
-    public ProcessedSimulationData(int infectedDaily, int diedDaily, int notInfectedDaily, int healedDaily){
-        this.infectedDaily=infectedDaily;
+    public ProcessedSimulationData(int infectedTotal, int diedDaily, int notInfectedDaily, int healedDaily){
+        this.infectedTotal =infectedTotal;
         this.diedDaily=diedDaily;
         this.notInfectedDaily=notInfectedDaily;
         this.healedDaily=healedDaily;
+    }
+
+    public ProcessedSimulationData(int infectedTotal, int diedDaily, int healedDaily, int infectedDaily, int notInfectedDaily){
+        this.infectedTotal =infectedTotal;
+        this.diedDaily=diedDaily;
+        this.notInfectedDaily=notInfectedDaily;
+        this.healedDaily=healedDaily;
+        this.infectedDaily=infectedDaily;
     }
 
     public void setOutputSimulationData(OutputSimulationData outputSimulationData) {
