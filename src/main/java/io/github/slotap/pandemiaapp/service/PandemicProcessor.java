@@ -13,9 +13,8 @@ import java.util.List;
 public class PandemicProcessor implements SimulationService {
 
     private final static int ZERODEAD = 0;
-    private final static int ZAREOHEALED = 0;
-    private final static int ZEROINFECTED = 0;
-    private final static int ZERONOTINFECTED = 0;
+    private final static int ZEREOHEALED = 0;
+    private final static int ZERO = 0;
 
     @Override
     public List<ProcessedSimulationData> processSimulation(InputSimulationData inputData) {
@@ -23,37 +22,24 @@ public class PandemicProcessor implements SimulationService {
 
         for (int i = 0; i < inputData.getDaysToSimulate(); i++) {
             if (i == 0) {
-                resultList.add(new ProcessedSimulationData(inputData.getInfected(), ZERODEAD, inputData.getPopulation() - inputData.getInfected(), ZAREOHEALED));
+                resultList.add(new ProcessedSimulationData(inputData.getInfected(), ZERODEAD, ZEREOHEALED, inputData.getInfected(), inputData.getPopulation() - inputData.getInfected()));
             } else {
-                if (validateInfectedNumberLessThanPopulation(i,resultList,inputData)) {
                     resultList.add(new ProcessedSimulationData(
-                            calculateInfected(i, resultList, inputData),
+                            calculateTotalInfected(i, resultList, inputData),
                             calculateDead(i, resultList, inputData),
                             calculateHealed(i, resultList, inputData),
                             calculateInfectedDaily(i, resultList, inputData),
                             calculateNotInfected(i, resultList, inputData)));
-                } else {
-                    resultList.add(new ProcessedSimulationData(
-                            inputData.getPopulation(),
-                            calculateDead(i, resultList, inputData),
-                            calculateHealed(i, resultList, inputData),
-                            ZEROINFECTED,
-                            ZERONOTINFECTED));
-                }
             }
         }
         return resultList;
-    }
-
-    private boolean validateInfectedNumberLessThanPopulation(int index,List<ProcessedSimulationData> resultList,InputSimulationData inputData ) {
-       return calculateInfected(index,resultList,inputData) < inputData.getPopulation();
     }
 
     private int calculateHealed(int index, List<ProcessedSimulationData> resultList, InputSimulationData inputData) {
         if(index - inputData.getDaysToHeal() < 0 || index - inputData.getDaysToHeal()+ inputData.getDaysToDie() > index){
             return 0;
         }else {
-            return resultList.get(index - inputData.getDaysToHeal()).getInfectedDaily() - resultList.get(index - inputData.getDaysToHeal() + inputData.getDaysToDie()).getDiedDaily();
+            return resultList.get(index - inputData.getDaysToHeal()).getInfectedDaily() - calculateDailyIncreaseOfDead(index,resultList,inputData) + resultList.get(index - 1).getHealedDaily();
         }
     }
 
@@ -61,19 +47,42 @@ public class PandemicProcessor implements SimulationService {
         if(index - inputData.getDaysToDie() < 0) {
             return 0;
         }
-        return (int) (inputData.getMortalityIndex() * resultList.get(index - inputData.getDaysToDie()).getInfectedDaily());
+        return (int) (inputData.getMortalityIndex() * resultList.get(index - inputData.getDaysToDie()).getInfectedDaily()) + resultList.get(index - 1).getDiedDaily();
     }
 
     private int calculateInfectedDaily(int index, List<ProcessedSimulationData> resultList, InputSimulationData inputData) {
-        return calculateInfected(index,resultList,inputData) - resultList.get(index - 1).getInfectedTotal();
+       if (validateSumInfectedHealedDeadGreaterThanPopulation(index,resultList,inputData)){
+           return resultList.get(index - 1).getNotInfectedDaily();
+       }
+        return calculateInfected(index,resultList,inputData);
     }
 
     private int calculateNotInfected(int index, List<ProcessedSimulationData> resultList, InputSimulationData inputData) {
-           return inputData.getPopulation() - calculateInfected(index,resultList,inputData) - calculateHealed(index, resultList, inputData) - calculateDead(index, resultList, inputData);
+        if (validateSumInfectedHealedDeadGreaterThanPopulation(index, resultList, inputData)) {
+            return ZERO;
+        }else{
+            return inputData.getPopulation() - calculateTotalInfected(index, resultList, inputData) - calculateHealed(index, resultList, inputData) - calculateDead(index, resultList, inputData);
+        }
+    }
+
+    private int calculateTotalInfected(int index, List<ProcessedSimulationData> resultList, InputSimulationData inputData) {
+        if (validateSumInfectedHealedDeadGreaterThanPopulation(index, resultList, inputData)) {
+            return inputData.getPopulation() - calculateDead(index, resultList, inputData) - calculateHealed(index, resultList, inputData);
+        }else{
+            return calculateInfectedDaily(index,resultList,inputData) - resultList.get(index - 1).getInfectedTotal()- calculateDead(index, resultList, inputData) - calculateHealed(index, resultList, inputData);
+        }
     }
 
     private int calculateInfected(int index, List<ProcessedSimulationData> resultList, InputSimulationData inputData) {
-                return (int) (resultList.get(index - 1).getInfectedTotal() * inputData.getRFactor());
+        return (int) (resultList.get(index - 1).getInfectedTotal() * inputData.getRFactor());
+    }
+
+    private boolean validateSumInfectedHealedDeadGreaterThanPopulation(int index, List<ProcessedSimulationData> resultList, InputSimulationData inputData) {
+        return calculateInfected(index, resultList, inputData) + resultList.get(index - 1).getHealedDaily() + resultList.get(index - 1).getDiedDaily() >= inputData.getPopulation();
+    }
+
+    private int calculateDailyIncreaseOfDead(int index, List<ProcessedSimulationData> resultList, InputSimulationData inputData){
+        return resultList.get(index - inputData.getDaysToHeal() + inputData.getDaysToDie()).getDiedDaily() - resultList.get(index - inputData.getDaysToHeal() + inputData.getDaysToDie() - 1).getDiedDaily();
     }
 
 }
