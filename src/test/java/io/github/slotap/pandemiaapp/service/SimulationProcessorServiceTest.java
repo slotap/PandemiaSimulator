@@ -32,7 +32,6 @@ class SimulationProcessorServiceTest {
     private final List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50,20,20,10));
     private final InputSimulationData inputTestData = createTestData();
 
-
     @Test
     void shouldCreateOutputData() {
         //Given

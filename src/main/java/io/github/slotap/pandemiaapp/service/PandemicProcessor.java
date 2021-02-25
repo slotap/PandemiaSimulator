@@ -12,8 +12,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PandemicProcessor implements SimulationService {
 
-    private final static int ZERODEAD = 0;
-    private final static int ZEREOHEALED = 0;
     private final static int ZERO = 0;
 
     @Override
@@ -22,7 +20,7 @@ public class PandemicProcessor implements SimulationService {
 
         for (int i = 0; i < inputData.getDaysToSimulate(); i++) {
             if (i == 0) {
-                resultList.add(new ProcessedSimulationData(inputData.getInfected(), ZERODEAD, ZEREOHEALED, inputData.getInfected(), inputData.getPopulation() - inputData.getInfected()));
+                resultList.add(new ProcessedSimulationData(inputData.getInfected(), ZERO, ZERO, inputData.getInfected(), inputData.getPopulation() - inputData.getInfected()));
             } else {
                     resultList.add(new ProcessedSimulationData(
                             calculateTotalInfected(i, resultList, inputData),
@@ -69,7 +67,7 @@ public class PandemicProcessor implements SimulationService {
         if (validateSumInfectedHealedDeadGreaterThanPopulation(index, resultList, inputData)) {
             return inputData.getPopulation() - calculateDead(index, resultList, inputData) - calculateHealed(index, resultList, inputData);
         }else{
-            return calculateInfectedDaily(index,resultList,inputData) - resultList.get(index - 1).getInfectedTotal()- calculateDead(index, resultList, inputData) - calculateHealed(index, resultList, inputData);
+            return calculateInfectedDaily(index,resultList,inputData) + resultList.get(index - 1).getInfectedTotal()- calculateDead(index, resultList, inputData) - calculateHealed(index, resultList, inputData);
         }
     }
 
@@ -84,5 +82,4 @@ public class PandemicProcessor implements SimulationService {
     private int calculateDailyIncreaseOfDead(int index, List<ProcessedSimulationData> resultList, InputSimulationData inputData){
         return resultList.get(index - inputData.getDaysToHeal() + inputData.getDaysToDie()).getDiedDaily() - resultList.get(index - inputData.getDaysToHeal() + inputData.getDaysToDie() - 1).getDiedDaily();
     }
-
 }
