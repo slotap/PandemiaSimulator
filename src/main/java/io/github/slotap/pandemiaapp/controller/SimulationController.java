@@ -6,12 +6,12 @@ import io.github.slotap.pandemiaapp.domain.OutputSimulationDataDto;
 import io.github.slotap.pandemiaapp.mapper.SimulationMapper;
 import io.github.slotap.pandemiaapp.service.DbService;
 import io.github.slotap.pandemiaapp.service.SimulationProcessorService;
-import io.github.slotap.pandemiaapp.service.SimulationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -40,14 +40,14 @@ public class SimulationController {
     }
 
     @PostMapping(value = "/simulations",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OutputSimulationDataDto> createSimulation(@RequestBody InputSimulationData inputData) {
+    public ResponseEntity<OutputSimulationDataDto> createSimulation(@RequestBody @Valid InputSimulationData inputData) {
         OutputSimulationData processedSimulation = simulationProcessor.createOutputData(inputData);
         processedSimulation = dbService.saveSimulationData(processedSimulation);
         return ResponseEntity.ok(simulationMapper.mapToOutputDto(processedSimulation));
     }
 
     @PutMapping(value = "/simulations/{simId}",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OutputSimulationDataDto> updateSimulation(@PathVariable Long simId, @RequestBody InputSimulationData inputData) {
+    public ResponseEntity<OutputSimulationDataDto> updateSimulation(@PathVariable Long simId, @RequestBody @Valid InputSimulationData inputData) {
             OutputSimulationData processedSimulation;
             try {
                  processedSimulation = simulationProcessor.updateOutputData(simId,inputData);
