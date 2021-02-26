@@ -47,6 +47,7 @@ class InputSimulationDataTest {
         // Then
         assertEquals(0, violations.size());
     }
+
     @Test
     public void shouldValidateIncorrectMortalityIndex() {
         // Given

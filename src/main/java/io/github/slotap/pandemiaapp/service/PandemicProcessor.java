@@ -72,7 +72,7 @@ public class PandemicProcessor implements SimulationService {
     }
 
     private int calculateInfected(int index, List<ProcessedSimulationData> resultList, InputSimulationData inputData) {
-        return (int) (resultList.get(index - 1).getInfectedTotal() * inputData.getRFactor());
+        return (int) (resultList.get(index - 1).getInfectedTotal() * inputData.getReproductionNumber());
     }
 
     private boolean validateSumInfectedHealedDeadGreaterThanPopulation(int index, List<ProcessedSimulationData> resultList, InputSimulationData inputData) {

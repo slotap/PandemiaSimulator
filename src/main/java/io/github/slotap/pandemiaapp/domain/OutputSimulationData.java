@@ -81,7 +81,7 @@ public class OutputSimulationData {
         this.title = updatedData.getTitle();
         this.population = updatedData.getPopulation();
         this.infected = updatedData.getInfected();
-        this.rFactor = updatedData.getRFactor();
+        this.rFactor = updatedData.getReproductionNumber();
         this.mortalityIndex = updatedData.getMortalityIndex();
         this.daysToHeal = updatedData.getDaysToHeal();
         this.daysToDie = updatedData.getDaysToDie();

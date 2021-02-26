@@ -1,4 +1,4 @@
-package io.github.slotap.pandemiaapp.Validator;
+package io.github.slotap.pandemiaapp.validator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -47,7 +47,7 @@ public class SimulationController {
     }
 
     @PutMapping(value = "/simulations/{simId}",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OutputSimulationDataDto> updateSimulation(@PathVariable Long simId, @RequestBody @Valid InputSimulationData inputData) {
+    public ResponseEntity<OutputSimulationDataDto> updateSimulation(@PathVariable Long simId,@RequestBody  @Valid InputSimulationData inputData) {
             OutputSimulationData processedSimulation;
             try {
                  processedSimulation = simulationProcessor.updateOutputData(simId,inputData);

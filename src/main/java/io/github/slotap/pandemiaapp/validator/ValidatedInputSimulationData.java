@@ -1,4 +1,4 @@
-package io.github.slotap.pandemiaapp.Validator;
+package io.github.slotap.pandemiaapp.validator;
 
 import io.github.slotap.pandemiaapp.domain.InputSimulationData;
 

@@ -1,6 +1,6 @@
 package io.github.slotap.pandemiaapp.domain;
 
-import io.github.slotap.pandemiaapp.Validator.ValidInputSimulationData;
+import io.github.slotap.pandemiaapp.validator.ValidInputSimulationData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class InputSimulationData {
     @NotNull
     private int infected;
     @NotNull
-    private Double rFactor;
+    private Double reproductionNumber;
     @NotNull
     private Double mortalityIndex;
     @NotNull

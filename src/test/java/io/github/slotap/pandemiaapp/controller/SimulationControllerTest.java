@@ -65,7 +65,7 @@ class SimulationControllerTest {
                             .andExpect(MockMvcResultMatchers.jsonPath("$[0].daysToDie", Matchers.is(5)))
                             .andExpect(MockMvcResultMatchers.jsonPath("$[0].daysToSimulate", Matchers.is(100)))
                             //Processed Data List
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].outputData[0].infectedDaily", Matchers.is(50)))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].outputData[0].infectedTotal", Matchers.is(50)))
                             .andExpect(MockMvcResultMatchers.jsonPath("$[0].outputData[0].diedDaily", Matchers.is(20)))
                             .andExpect(MockMvcResultMatchers.jsonPath("$[0].outputData[0].notInfectedDaily", Matchers.is(20)))
                             .andExpect(MockMvcResultMatchers.jsonPath("$[0].outputData[0].healedDaily", Matchers.is(10)));
@@ -95,7 +95,7 @@ class SimulationControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.daysToDie", Matchers.is(5)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.daysToSimulate", Matchers.is(100)))
                 //Processed Data List
-                .andExpect(MockMvcResultMatchers.jsonPath("$.outputData[0].infectedDaily", Matchers.is(50)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.outputData[0].infectedTotal", Matchers.is(50)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.outputData[0].diedDaily", Matchers.is(20)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.outputData[0].notInfectedDaily", Matchers.is(20)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.outputData[0].healedDaily", Matchers.is(10)));
@@ -107,14 +107,14 @@ class SimulationControllerTest {
         List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50,20,20,10));
         OutputSimulationData outputSimulationData = new OutputSimulationData(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
         OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
-        OutputSimulationDataDto outputSimulationDataDtoJson = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
+        InputSimulationData inputSimulationData = new InputSimulationData ("testSim",100,20,1.5,1.5,12,5,100);
 
         when(simulationService.createOutputData(any(InputSimulationData.class))).thenReturn(outputSimulationData);
         when(dbService.saveSimulationData(outputSimulationData)).thenReturn(outputSimulationData);
         when(simulationMapper.mapToOutputDto(outputSimulationData)).thenReturn(outputSimulationDataDto);
 
         Gson gson = new Gson();
-        String jsonContent = gson.toJson(outputSimulationDataDtoJson);
+        String jsonContent = gson.toJson(inputSimulationData);
 
         //When & Then
         mockMvc
@@ -141,14 +141,14 @@ class SimulationControllerTest {
         List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50,20,20,10));
         OutputSimulationData outputSimulationData = new OutputSimulationData(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
         OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
-        OutputSimulationDataDto outputSimulationDataDtoJson = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
+        InputSimulationData inputSimulationData = new InputSimulationData ("testSim",100,20,1.5,1.5,12,5,100);
 
         when(simulationService.updateOutputData(any(Long.class),any(InputSimulationData.class))).thenReturn(outputSimulationData);
         when(dbService.saveSimulationData(outputSimulationData)).thenReturn(outputSimulationData);
         when(simulationMapper.mapToOutputDto(outputSimulationData)).thenReturn(outputSimulationDataDto);
 
         Gson gson = new Gson();
-        String jsonContent = gson.toJson(outputSimulationDataDtoJson);
+        String jsonContent = gson.toJson(inputSimulationData);
 
         //When & Then
         mockMvc
