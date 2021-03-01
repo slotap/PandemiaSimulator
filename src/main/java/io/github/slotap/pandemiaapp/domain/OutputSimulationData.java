@@ -22,7 +22,7 @@ public class OutputSimulationData {
     @Column(name="id",unique = true)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "sim_name")
     @NotNull
     private String title;
 

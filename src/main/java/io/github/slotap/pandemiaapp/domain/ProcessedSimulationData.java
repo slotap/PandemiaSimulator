@@ -30,7 +30,7 @@ public class ProcessedSimulationData {
     @NotNull
     private int diedDaily;
 
-    @Column(name = "not_infecte_daily")
+    @Column(name = "not_infected_daily")
     @NotNull
     private int notInfectedDaily;
 
@@ -39,7 +39,7 @@ public class ProcessedSimulationData {
     private int healedDaily;
 
     @ManyToOne
-    @JoinColumn(name = "output_data")
+    @JoinColumn(name = "output_data_id")
     private OutputSimulationData outputSimulationData;
 
     public ProcessedSimulationData(int infectedTotal, int diedDaily, int notInfectedDaily, int healedDaily){

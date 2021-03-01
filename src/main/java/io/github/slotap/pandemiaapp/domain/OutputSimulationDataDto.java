@@ -17,5 +17,5 @@ public class OutputSimulationDataDto {
     private int daysToHeal;
     private int daysToDie;
     private int daysToSimulate;
-    private List<ProcessedSimulationData> outputData;
+    private List<ProcessedSimulationDataDto> outputData;
 }

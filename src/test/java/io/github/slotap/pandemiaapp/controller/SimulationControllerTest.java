@@ -1,10 +1,7 @@
 package io.github.slotap.pandemiaapp.controller;
 
 import com.google.gson.Gson;
-import io.github.slotap.pandemiaapp.domain.InputSimulationData;
-import io.github.slotap.pandemiaapp.domain.OutputSimulationData;
-import io.github.slotap.pandemiaapp.domain.OutputSimulationDataDto;
-import io.github.slotap.pandemiaapp.domain.ProcessedSimulationData;
+import io.github.slotap.pandemiaapp.domain.*;
 import io.github.slotap.pandemiaapp.mapper.SimulationMapper;
 import io.github.slotap.pandemiaapp.service.DbService;
 import io.github.slotap.pandemiaapp.service.SimulationProcessorService;
@@ -42,41 +39,43 @@ class SimulationControllerTest {
     private SimulationProcessorService simulationService;
 
     @Test
-    void shouldFetchAllSimulations() throws Exception{
+    void shouldFetchAllSimulations() throws Exception {
         //Given
-        List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50,20,20,10));
-        List<OutputSimulationData> outputSimulationDataList = List.of(new OutputSimulationData(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData));
-        List<OutputSimulationDataDto> outputSimulationDataListDto = List.of(new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData));
+        List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50, 20, 20, 10));
+        List<ProcessedSimulationDataDto> processedDataDto = List.of(new ProcessedSimulationDataDto(50, 20, 20, 10));
+        List<OutputSimulationData> outputSimulationDataList = List.of(new OutputSimulationData(1L, "testSim", 100, 20, 1.5, 1.5, 12, 5, 100, processedData));
+        List<OutputSimulationDataDto> outputSimulationDataListDto = List.of(new OutputSimulationDataDto(1L, "testSim", 100, 20, 1.5, 1.5, 12, 5, 100, processedDataDto));
         when(dbService.getAllSimulations()).thenReturn(outputSimulationDataList);
         when(simulationMapper.mapToSimulationList(outputSimulationDataList)).thenReturn(outputSimulationDataListDto);
 
         //When & Then
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/simulations")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(1)))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].title", Matchers.is("testSim")))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].population", Matchers.is(100)))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].infected", Matchers.is(20)))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].rfactor", Matchers.is(1.5)))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].mortalityIndex", Matchers.is(1.5)))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].daysToHeal", Matchers.is(12)))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].daysToDie", Matchers.is(5)))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].daysToSimulate", Matchers.is(100)))
-                            //Processed Data List
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].outputData[0].infectedTotal", Matchers.is(50)))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].outputData[0].diedDaily", Matchers.is(20)))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].outputData[0].notInfectedDaily", Matchers.is(20)))
-                            .andExpect(MockMvcResultMatchers.jsonPath("$[0].outputData[0].healedDaily", Matchers.is(10)));
+                .get("/api/simulations")
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].title", Matchers.is("testSim")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].population", Matchers.is(100)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].infected", Matchers.is(20)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].rfactor", Matchers.is(1.5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].mortalityIndex", Matchers.is(1.5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].daysToHeal", Matchers.is(12)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].daysToDie", Matchers.is(5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].daysToSimulate", Matchers.is(100)))
+                //Processed Data List
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].outputData[0].infectedTotal", Matchers.is(50)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].outputData[0].diedDaily", Matchers.is(20)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].outputData[0].notInfectedDaily", Matchers.is(20)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].outputData[0].healedDaily", Matchers.is(10)));
     }
 
     @Test
     void shouldFetchOneSimulation() throws Exception {
         //Given
-        List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50,20,20,10));
+        List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50, 20, 20, 10));
+        List<ProcessedSimulationDataDto> processedDataDto = List.of(new ProcessedSimulationDataDto(50, 20, 20, 10));
         Optional<OutputSimulationData> outputSimulationData = Optional.of(new OutputSimulationData(1L, "testSim", 100, 20, 1.5, 1.5, 12, 5, 100, processedData));
-        OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
+        OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L, "testSim", 100, 20, 1.5, 1.5, 12, 5, 100, processedDataDto);
 
         when(dbService.findById(1L)).thenReturn(outputSimulationData);
         when(simulationMapper.mapToOutputDto(outputSimulationData.get())).thenReturn(outputSimulationDataDto);
@@ -101,12 +100,14 @@ class SimulationControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.outputData[0].healedDaily", Matchers.is(10)));
     }
 
+
     @Test
     void shouldCreateSimulation() throws Exception {
         //Given
         List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50,20,20,10));
+        List<ProcessedSimulationDataDto> processedDataDto = List.of(new ProcessedSimulationDataDto(50,20,20,10));
         OutputSimulationData outputSimulationData = new OutputSimulationData(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
-        OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
+        OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedDataDto);
         InputSimulationData inputSimulationData = new InputSimulationData ("testSim",100,20,1.5,1.5,12,5,100);
 
         when(simulationService.createOutputData(any(InputSimulationData.class))).thenReturn(outputSimulationData);
@@ -139,8 +140,9 @@ class SimulationControllerTest {
     void shouldUpdateSimulation() throws Exception {
         //Given
         List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50,20,20,10));
+        List<ProcessedSimulationDataDto> processedDataDto = List.of(new ProcessedSimulationDataDto(50,20,20,10));
         OutputSimulationData outputSimulationData = new OutputSimulationData(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
-        OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
+        OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedDataDto);
         InputSimulationData inputSimulationData = new InputSimulationData ("testSim",100,20,1.5,1.5,12,5,100);
 
         when(simulationService.updateOutputData(any(Long.class),any(InputSimulationData.class))).thenReturn(outputSimulationData);
@@ -168,4 +170,5 @@ class SimulationControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.daysToSimulate", Matchers.is(100)));
 
     }
+
 }

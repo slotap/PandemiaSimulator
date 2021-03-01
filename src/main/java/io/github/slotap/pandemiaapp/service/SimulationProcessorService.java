@@ -19,6 +19,7 @@ public class SimulationProcessorService {
             OutputSimulationData createdOutput = new OutputSimulationData();
             createdOutput.updateSimData(inputData);
             createdOutput.setOutputData(simulationService.processSimulation(inputData));
+            updateProcessedSimulationDataWithOutputDataReference(createdOutput);
         return  createdOutput;
     }
 
@@ -26,6 +27,12 @@ public class SimulationProcessorService {
             OutputSimulationData createdOutput = dbService.findById(id).orElseThrow(() -> new SimulationNotFoundException("Simulation Not Found"));
             createdOutput.updateSimData(inputData);
             createdOutput.setOutputData(simulationService.processSimulation(inputData));
+            updateProcessedSimulationDataWithOutputDataReference(createdOutput);
         return  createdOutput;
+    }
+
+    private void updateProcessedSimulationDataWithOutputDataReference(OutputSimulationData createdOutput) {
+            createdOutput.getOutputData()
+                                        .forEach(processedSimulationData -> processedSimulationData.setOutputSimulationData(createdOutput));
     }
 }
