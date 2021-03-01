@@ -106,9 +106,9 @@ class SimulationControllerTest {
         //Given
         List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50,20,20,10));
         List<ProcessedSimulationDataDto> processedDataDto = List.of(new ProcessedSimulationDataDto(50,20,20,10));
-        OutputSimulationData outputSimulationData = new OutputSimulationData(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
-        OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedDataDto);
-        InputSimulationData inputSimulationData = new InputSimulationData ("testSim",100,20,1.5,1.5,12,5,100);
+        OutputSimulationData outputSimulationData = new OutputSimulationData(1L,"testSim",100,20,1.5,0.5,12,5,100,processedData);
+        OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,0.5,12,5,100,processedDataDto);
+        InputSimulationData inputSimulationData = new InputSimulationData ("testSim",100,1,1.5,0.5,4,3,10);
 
         when(simulationService.createOutputData(any(InputSimulationData.class))).thenReturn(outputSimulationData);
         when(dbService.saveSimulationData(outputSimulationData)).thenReturn(outputSimulationData);
@@ -129,7 +129,7 @@ class SimulationControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.population", Matchers.is(100)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.infected", Matchers.is(20)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.rfactor", Matchers.is(1.5)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.mortalityIndex", Matchers.is(1.5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mortalityIndex", Matchers.is(0.5)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.daysToHeal", Matchers.is(12)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.daysToDie", Matchers.is(5)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.daysToSimulate", Matchers.is(100)));
@@ -141,9 +141,9 @@ class SimulationControllerTest {
         //Given
         List<ProcessedSimulationData> processedData = List.of(new ProcessedSimulationData(50,20,20,10));
         List<ProcessedSimulationDataDto> processedDataDto = List.of(new ProcessedSimulationDataDto(50,20,20,10));
-        OutputSimulationData outputSimulationData = new OutputSimulationData(1L,"testSim",100,20,1.5,1.5,12,5,100,processedData);
-        OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,1.5,12,5,100,processedDataDto);
-        InputSimulationData inputSimulationData = new InputSimulationData ("testSim",100,20,1.5,1.5,12,5,100);
+        OutputSimulationData outputSimulationData = new OutputSimulationData(1L,"testSim",100,20,1.5,0.5,12,5,100,processedData);
+        OutputSimulationDataDto outputSimulationDataDto = new OutputSimulationDataDto(1L,"testSim",100,20,1.5,0.5,12,5,100,processedDataDto);
+        InputSimulationData inputSimulationData = new InputSimulationData ("testSim",100,20,1.5,0.5,12,5,100);
 
         when(simulationService.updateOutputData(any(Long.class),any(InputSimulationData.class))).thenReturn(outputSimulationData);
         when(dbService.saveSimulationData(outputSimulationData)).thenReturn(outputSimulationData);
@@ -164,11 +164,10 @@ class SimulationControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.population", Matchers.is(100)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.infected", Matchers.is(20)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.rfactor", Matchers.is(1.5)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.mortalityIndex", Matchers.is(1.5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mortalityIndex", Matchers.is(0.5)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.daysToHeal", Matchers.is(12)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.daysToDie", Matchers.is(5)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.daysToSimulate", Matchers.is(100)));
 
     }
-
 }
