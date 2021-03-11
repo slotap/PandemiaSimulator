@@ -57,10 +57,10 @@ public class SimulationController {
         return ResponseEntity.ok(simulationMapper.mapToOutputDto(processedSimulation));
     }
     @PutMapping(value = "/save/{simId}",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveUpdatedSimulation(@PathVariable Long simId,@RequestBody  @Valid OutputSimulationData outputData) {
-        if (dbService.existById(simId)){
-              dbService.saveSimulationData(outputData);
-        } else {
+    public ResponseEntity<?> saveUpdatedSimulation(@PathVariable Long simId,@RequestBody @Valid InputSimulationData inputData){
+        try {
+              dbService.saveSimulationData(simulationProcessor.updateOutputData(simId,inputData));
+        } catch (SimulationNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();
