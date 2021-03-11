@@ -12,7 +12,7 @@ public class OutputSimulationDataDto {
     private String title;
     private int population;
     private int infected;
-    private Double rFactor;
+    private Double reproductionNumber;
     private Double mortalityIndex;
     private int daysToHeal;
     private int daysToDie;

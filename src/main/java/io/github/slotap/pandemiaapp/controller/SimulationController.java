@@ -54,7 +54,15 @@ public class SimulationController {
             } catch (SimulationNotFoundException e) {
                 return ResponseEntity.notFound().build();
             }
-            dbService.saveSimulationData(processedSimulation);
         return ResponseEntity.ok(simulationMapper.mapToOutputDto(processedSimulation));
+    }
+    @PutMapping(value = "/save/{simId}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveUpdatedSimulation(@PathVariable Long simId,@RequestBody  @Valid OutputSimulationData outputData) {
+        if (dbService.existById(simId)){
+              dbService.saveSimulationData(outputData);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
     }
 }

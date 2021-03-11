@@ -18,7 +18,7 @@ public class SimulationMapper {
                 outputData.getTitle(),
                 outputData.getPopulation(),
                 outputData.getInfected(),
-                outputData.getRFactor(),
+                outputData.getReproductionNumber(),
                 outputData.getMortalityIndex(),
                 outputData.getDaysToHeal(),
                 outputData.getDaysToDie(),

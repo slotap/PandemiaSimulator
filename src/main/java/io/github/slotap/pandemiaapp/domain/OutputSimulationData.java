@@ -36,7 +36,7 @@ public class OutputSimulationData {
 
     @Column(name = "r_factor")
     @NotNull
-    private Double rFactor;
+    private Double reproductionNumber;
 
     @Column(name = "mortality")
     @NotNull
@@ -62,11 +62,11 @@ public class OutputSimulationData {
     )
     private List<ProcessedSimulationData> outputData = new ArrayList<>();
 
-    public OutputSimulationData(@NotNull String title, @NotNull int population, @NotNull int infected, @NotNull Double rFactor, @NotNull Double mortalityIndex, @NotNull int daysToHeal, @NotNull int daysToDie, @NotNull int daysToSimulate) {
+    public OutputSimulationData(@NotNull String title, @NotNull int population, @NotNull int infected, @NotNull Double reproductionNumber, @NotNull Double mortalityIndex, @NotNull int daysToHeal, @NotNull int daysToDie, @NotNull int daysToSimulate) {
         this.title = title;
         this.population = population;
         this.infected = infected;
-        this.rFactor = rFactor;
+        this.reproductionNumber = reproductionNumber;
         this.mortalityIndex = mortalityIndex;
         this.daysToHeal = daysToHeal;
         this.daysToDie = daysToDie;
@@ -81,7 +81,7 @@ public class OutputSimulationData {
         this.title = updatedData.getTitle();
         this.population = updatedData.getPopulation();
         this.infected = updatedData.getInfected();
-        this.rFactor = updatedData.getReproductionNumber();
+        this.reproductionNumber = updatedData.getReproductionNumber();
         this.mortalityIndex = updatedData.getMortalityIndex();
         this.daysToHeal = updatedData.getDaysToHeal();
         this.daysToDie = updatedData.getDaysToDie();
@@ -93,11 +93,11 @@ public class OutputSimulationData {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OutputSimulationData that = (OutputSimulationData) o;
-        return population == that.population && infected == that.infected && daysToHeal == that.daysToHeal && daysToDie == that.daysToDie && daysToSimulate == that.daysToSimulate && id.equals(that.id) && title.equals(that.title) && rFactor.equals(that.rFactor) && mortalityIndex.equals(that.mortalityIndex);
+        return population == that.population && infected == that.infected && daysToHeal == that.daysToHeal && daysToDie == that.daysToDie && daysToSimulate == that.daysToSimulate && id.equals(that.id) && title.equals(that.title) && reproductionNumber.equals(that.reproductionNumber) && mortalityIndex.equals(that.mortalityIndex);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, population, infected, rFactor, mortalityIndex, daysToHeal, daysToDie, daysToSimulate);
+        return Objects.hash(id, title, population, infected, reproductionNumber, mortalityIndex, daysToHeal, daysToDie, daysToSimulate);
     }
 }
