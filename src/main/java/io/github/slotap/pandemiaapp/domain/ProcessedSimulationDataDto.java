@@ -3,6 +3,8 @@ package io.github.slotap.pandemiaapp.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 @AllArgsConstructor
 public class ProcessedSimulationDataDto {
@@ -18,5 +20,18 @@ public class ProcessedSimulationDataDto {
         this.diedDaily=diedDaily;
         this.notInfectedDaily=notInfectedDaily;
         this.healedDaily=healedDaily;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProcessedSimulationDataDto that = (ProcessedSimulationDataDto) o;
+        return infectedTotal == that.infectedTotal && infectedDaily == that.infectedDaily && diedDaily == that.diedDaily && notInfectedDaily == that.notInfectedDaily && healedDaily == that.healedDaily && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, infectedTotal, infectedDaily, diedDaily, notInfectedDaily, healedDaily);
     }
 }

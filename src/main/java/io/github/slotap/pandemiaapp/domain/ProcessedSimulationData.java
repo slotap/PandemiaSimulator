@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Getter
 @AllArgsConstructor
@@ -59,5 +60,18 @@ public class ProcessedSimulationData {
 
     public void setOutputSimulationData(OutputSimulationData outputSimulationData) {
         this.outputSimulationData = outputSimulationData;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProcessedSimulationData that = (ProcessedSimulationData) o;
+        return infectedTotal == that.infectedTotal && infectedDaily == that.infectedDaily && diedDaily == that.diedDaily && notInfectedDaily == that.notInfectedDaily && healedDaily == that.healedDaily && Objects.equals(id, that.id) && Objects.equals(outputSimulationData, that.outputSimulationData);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, infectedTotal, infectedDaily, diedDaily, notInfectedDaily, healedDaily, outputSimulationData);
     }
 }
